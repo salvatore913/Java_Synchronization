@@ -38,7 +38,7 @@ public class CarShowroom {
         }
     }
 
-    public void buy() {
+    public void sellSeveralTimes() {
         for (int i = 0; i <= BUYERS; i++) {
             this.sellCar();
         }
