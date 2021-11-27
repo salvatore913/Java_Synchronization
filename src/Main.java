@@ -1,12 +1,13 @@
 public class Main {
+    private static final int CARS = 10;
 
     public static void main(String[] args) {
         final CarShowroom carShowroom = new CarShowroom();
-        new Thread(null, carShowroom::receiveCar, "Kia").start();
-        new Thread(null, carShowroom::sellSeveralTimes, "Покупатель 1").start();
-        new Thread(null, carShowroom::sellSeveralTimes, "Покупатель 2").start();
-        new Thread(null, carShowroom::sellSeveralTimes, "Покупатель 3").start();
-
-
+        for (int i = 0; i < CARS; i++) {
+            new Thread(null, carShowroom::sellCar, "Покупатель 1").start();
+            new Thread(null, carShowroom::sellCar, "Покупатель 2").start();
+            new Thread(null, carShowroom::sellCar, "Покупатель 3").start();
+            new Thread(null, carShowroom::receiveCar, "Kia").start();
+        }
     }
 }

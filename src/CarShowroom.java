@@ -2,45 +2,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CarShowroom {
-    private final int PRODUCTION_TIME = 3000;
+    private final int PRODUCTION_TIME = 1500;
     private final int SELL_TIME = 1500;
-    private final int BUYERS = 3;
-    private final int CARS = 10;
     private final List<Car> cars = new ArrayList<>();
 
     public synchronized void sellCar() {
         try {
             System.out.println(Thread.currentThread().getName() + " зашел в автосалон");
-            while (cars.size() == 0) {
+            while (getCars().isEmpty()) {
                 System.out.println("Машин нет");
                 wait();
             }
             Thread.sleep(SELL_TIME);
             System.out.println(Thread.currentThread().getName() + " уехал на новеньком авто");
-            cars.remove(0);
+            getCars().remove(0);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }
 
-    public void receiveCar() {
-        for (int i = 0; i < CARS; i++) {
-            try {
-                Thread.sleep(PRODUCTION_TIME);
-                cars.add(new Car());
-                System.out.println("Производитель " + Thread.currentThread().getName() + " выпустил 1 авто");
-                synchronized (this) {
-                    notify();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+    public synchronized void receiveCar() {
+        try {
+            Thread.sleep(PRODUCTION_TIME);
+            getCars().add(new Car());
+            System.out.println("Производитель " + Thread.currentThread().getName() + " выпустил 1 авто");
+            notify();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
-    public void sellSeveralTimes() {
-        for (int i = 0; i <= BUYERS; i++) {
-            this.sellCar();
-        }
+    List<Car> getCars() {
+        return cars;
     }
 }
